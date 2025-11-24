@@ -1,0 +1,79 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="TestProceduresUpdate\LOG_ITEM_CHANGE.sql" />
+    <None Remove="TestScripts\domains\D_CREATED_AT.sql" />
+    <None Remove="TestScripts\domains\D_DESCRIPTION.sql" />
+    <None Remove="TestScripts\domains\D_ID.sql" />
+    <None Remove="TestScripts\domains\D_IS_ACTIVE.sql" />
+    <None Remove="TestScripts\domains\D_NAME.sql" />
+    <None Remove="TestScripts\procedures\P_GET_ACTIVE_ITEMS.sql" />
+    <None Remove="TestScripts\tables\CATEGORY.sql" />
+    <None Remove="TestScripts\tables\ITEM.sql" />
+    <None Remove="TestScripts\tables\ITEM_TAG.sql" />
+    <None Remove="TestScripts\tables\TAG.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="TestProceduresUpdate\LOG_ITEM_CHANGE.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestProceduresUpdate\P_GET_ITEMS_BY_TAG.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestScripts\domains\D_CREATED_AT.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestScripts\domains\D_DESCRIPTION.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestScripts\domains\D_ID.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestScripts\domains\D_IS_ACTIVE.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestScripts\domains\D_NAME.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestScripts\procedures\P_GET_ACTIVE_ITEMS.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestScripts\tables\CATEGORY.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestScripts\tables\ITEM.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestScripts\tables\ITEM_TAG.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestScripts\tables\TAG.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.2" />
+    <PackageReference Include="FluentAssertions" Version="8.8.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DbMetaTool\DbMetaTool.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>
