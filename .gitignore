@@ -1,0 +1,109 @@
+# -----------------------------
+# .NET / C# / Visual Studio
+# -----------------------------
+
+# Build results
+bin/
+obj/
+out/
+app.publish/
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+.history/
+*.code-workspace
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# NuGet packages
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+project.lock.json
+project.assets.json
+artifacts/
+
+# Logs
+*.log
+logs/
+Log/
+log/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.cache
+*.config.old
+*.orig
+
+# OS-specific
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+# KDE
+.directory
+
+# -----------------------------
+# Firebird specific (optional)
+# -----------------------------
+*.fdb
+*.fbk
+*.gdb
+*.ib
+
+# Jeśli chcesz trzymać bazę lokalnie, usuń powyższe rozszerzenia.
+
+# -----------------------------
+# Tooling / CLI
+# -----------------------------
+# dotnet user secrets
+secrets.json
+
+# Build caches
+.cache/
+.tmp/
+
+# -----------------------------
+# Git
+# -----------------------------
+*.orig
+*.rej
+*.patch
+
+# -----------------------------
+# Test output
+# -----------------------------
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+coverage.opencover.xml
+
+# -----------------------------
+# Rider / Resharper
+# -----------------------------
+_ReSharper*/
+*.[Rr]e[Ss]harper
+resharper.xml
+*.DotSettings.user
