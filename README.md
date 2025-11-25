@@ -1,102 +1,188 @@
-DbMetaTool � narz�dzie do eksportu i odtwarzania metadanych Firebird 5.0
-==========================================================================
 
-Opis
-----
-`DbMetaTool` to aplikacja konsolowa napisana w .NET 8, s�u��ca do:
+# DbMetaTool – narzędzie do eksportu i odtwarzania metadanych Firebird 5.0
+--------------------------------------------------------------------------
 
-- budowania bazy Firebird 5.0 ze skrypt�w SQL,
-- generowania skrypt�w metadanych z istniej�cej bazy (eksport do SQL),
-- aktualizacji istniej�cej bazy na podstawie katalogu ze skryptami.
+## 📌 Opis
 
-Aplikacja obs�uguje w uproszczonym zakresie tylko: domeny, tabele (z kolumnami) oraz procedury.
+**DbMetaTool** to aplikacja konsolowa napisana w **.NET 8**, służąca do:
 
-Wymagania
----------
-- .NET 8 SDK
-- Serwer Firebird 5.0 (lokalnie lub zdalnie) � zainstalowany i uruchomiony
-- (opcjonalnie) IBExpert lub inny klient do r�cznej weryfikacji bazy
+- budowania nowej bazy Firebird 5.0 ze skryptów SQL,
+- generowania skryptów metadanych z istniejącej bazy (eksport do SQL),
+- aktualizacji istniejącej bazy na podstawie katalogu ze skryptami.
 
-Budowanie
----------
-W katalogu z rozwi�zaniem uruchom:
+Aplikacja obsługuje w uproszczonym zakresie **tylko trzy typy obiektów**:
 
-```
+✔ domeny  
+✔ tabele (z kolumnami)  
+✔ procedury  
+
+Pozostałe obiekty (constraints, indeksy, triggery itp.) są **pominięte**, zgodnie z wymaganiami zadania.
+
+---
+
+## ⚙️ Wymagania
+
+- **.NET 8 SDK**
+- **Firebird Server 5.0** (zainstalowany lokalnie lub zdalnie)
+- (opcjonalnie) **IBExpert**, **DBeaver** lub inny klient bazodanowy
+
+---
+
+## 🧱 Budowanie projektu
+
+W katalogu głównym repozytorium:
+
+```bash
 dotnet restore
 dotnet build
 ```
 
-Testy jednostkowe (je�li do��czone):
+---
 
-```
+## 🧪 Testy jednostkowe
+
+Jeśli projekt testów jest dołączony:
+
+```bash
 dotnet test ./DbMetaTool.Tests/DbMetaTool.Tests.csproj
 ```
 
-U�ycie
-------
-Aplikacja ma trzy g��wne polecenia:
+Testy działają na **tymczasowych katalogach**, tworzą osobne pliki `.fdb` i nie wymagają ręcznego czyszczenia.
 
-1) `build-db` � zbuduj now� baz� ze skrypt�w
+---
+
+# 🚀 Użycie
+
+Aplikacja działa z poziomu terminala i obsługuje trzy główne komendy.
+
+---
+
+## 1) **build-db** — zbuduj bazę ze skryptów
 
 Parametry:
-- `--db-dir <�cie�ka>` � katalog, w kt�rym zostanie utworzony plik bazy (`.fdb`)
-- `--scripts-dir <�cie�ka>` � katalog zawieraj�cy skrypty `.sql`
 
-Przyk�ad:
+| parametr        | opis |
+|-----------------|------|
+| `--db-dir`      | katalog, w którym ma zostać utworzona baza `.fdb` |
+| `--scripts-dir` | katalog zawierający skrypty SQL |
 
-```
+Przykład:
+
+```bash
 DbMetaTool build-db --db-dir "C:\db\fb5" --scripts-dir "C:\scripts"
 ```
 
-2) `export-scripts` � wygeneruj skrypty z istniej�cej bazy
+---
+
+## 2) **export-scripts** — wygeneruj skrypty z istniejącej bazy
 
 Parametry:
-- `--connection-string "<connStr>"` � connection string do bazy
-- `--output-dir <�cie�ka>` � katalog wyj�ciowy dla plik�w
 
-Przyk�ad:
+| parametr              | opis |
+|-----------------------|------|
+| `--connection-string` | connection string do bazy Firebird |
+| `--output-dir`        | katalog, do którego zostaną zapisane pliki |
 
-```
+Przykład:
+
+```bash
 DbMetaTool export-scripts --connection-string "User=SYSDBA;Password=masterkey;Database=C:\db\fb5\database.fdb;DataSource=localhost;Port=3050;Charset=UTF8" --output-dir "C:\out"
 ```
 
-3) `update-db` � zaktualizuj istniej�c� baz� na podstawie skrypt�w
-
-Parametry:
-- `--connection-string "<connStr>"`
-- `--scripts-dir <�cie�ka>`
-
-Przyk�ad:
+Rezultat to struktura:
 
 ```
+out/
+ ├── domains/
+ ├── tables/
+ └── procedures/
+```
+
+---
+
+## 3) **update-db** — zaktualizuj bazę na podstawie katalogu skryptów
+
+Parametry:
+
+| parametr              | opis |
+|-----------------------|------|
+| `--connection-string` | connection string do istniejącej bazy |
+| `--scripts-dir`       | katalog ze skryptami SQL |
+
+Przykład:
+
+```bash
 DbMetaTool update-db --connection-string "..." --scripts-dir "C:\scripts"
 ```
 
-Jak to dzia�a (kr�tko)
-----------------------
-- `Program.cs` � parsowanie argument�w i wywo�ania operacji.
-- `DatabaseManager` � tworzy baz� (`CreateDatabase`), wykonuje skrypty i aktualizuje istniej�c� baz�.
-- `ScriptExporter` � odczytuje metadane przez `IDatabaseMetadataReader` i zapisuje pliki SQL w katalogach `domains`, `tables`, `procedures`.
-- `FileManager` � zapisuje pliki na dysku.
+---
 
-Ograniczenia i znane braki
--------------------------
-- Eksport w formacie `SQL` jest zaimplementowany. Format�w `JSON` i `TXT` nie zaimplementowano (rzucaj� `NotImplementedException`).
-- Obs�uga obiekt�w takich jak constraints, indeksy, triggery itp. jest pomini�ta (zgodnie z uproszczonym zakresem zadania).
-- Operacja `update-db` dzia�a permisywnie: pomija istniej�ce domeny i tabele (nie modyfikuje ich), natomiast wykonuje procedury i pozosta�e skrypty.
+# 📂 Struktura katalogów skryptów
 
-Weryfikacja poprawno�ci dzia�ania
----------------------------------
-Sugerowany scenariusz r�cznej weryfikacji:
-1. Utw�rz manualnie baz� testow� z kilkoma domenami, tabelami i procedurami.
-2. Uruchom `export-scripts` i zapisz wygenerowane pliki.
-3. U�yj `build-db`, wskazuj�c inny katalog docelowy oraz katalog wygenerowanych skrypt�w.
-4. Por�wnaj struktury obu baz (domeny, tabele, procedury).
+DbMetaTool oczekuje następującej struktury:
 
-Sugestie rozwoju
------------------
-- Implementacja eksportu do `JSON` i `TXT`.
-- Obs�uga constraints, indeks�w i trigger�w.
-- Mechanizm �diff� schemat�w i migracji (ALTER / patch).
-- Transakcje i rollback podczas wykonywania skrypt�w.
+```
+scripts/
+ ├── domains/
+ │    ├── D_PRICE.sql
+ │    └── D_NAME.sql
+ ├── tables/
+ │    ├── ITEMS.sql
+ │    └── TAGS.sql
+ └── procedures/
+      ├── P_GET_ITEMS.sql
+      └── P_LOG_CHANGE.sql
+```
+
+Każdy plik odpowiada jednemu obiektowi Firebird.
+
+---
+
+# 📐 Architektura projektu
+
+```
+DbMetaTool/
+ ├── Application/
+ │    ├── Contracts/        → interfejsy (IDatabaseManager, IScriptExporter...)
+ │    └── Services/         → implementacje logiki
+ ├── Domain/
+ │    └── Models/           → POCO: DomainType, Table, Column, Procedure
+ ├── Infrastructure/        → pomocnicze narzędzia (np. FileSaver)
+ ├── Program.cs             → parsowanie argumentów i uruchamianie operacji
+```
+
+---
+
+# 🔄 Działanie update-db
+
+`update-db` działa w sposób **bezpieczny / permisywny**:
+
+| Obiekt       | Zachowanie |
+|--------------|------------|
+| **domena**   | tworzona, jeśli nie istnieje |
+| **tabela**   | tworzona, jeśli nie istnieje |
+| **procedura**| zawsze wykonywana (`CREATE OR ALTER`) |
+| **inne pliki** | wykonywane bez zmian |
+
+---
+
+# 🧪 Zakres testów (DbMetaTool.Tests)
+
+Testy integracyjne sprawdzają:
+
+✔ tworzenie bazy z katalogu skryptów  
+✔ eksport skryptów z istniejącej bazy  
+✔ idempotentność update-db  
+✔ propagację nowych obiektów  
+✔ brak usuwania istniejących kolumn  
+
+---
+
+# 🔮 Sugestie rozwoju
+
+- eksport JSON / TXT  
+- obsługa triggerów, indeksów, constraints  
+- generator migracji (ALTER TABLE)  
+- automatyczny schema diff  
+- rollback przy błędach  
 
